@@ -36,10 +36,12 @@ bool DataBase::createTable()
     if(!sql_query.exec(create_sql))
     {
         qDebug() << "Error: Fail to create table." << sql_query.lastError();
+        return false;
     }
     else
     {
         qDebug() << "Table created!";
+        return true;
     }
 }
 
@@ -81,11 +83,12 @@ QString DataBase::querySong(QString name)
         //qDebug() << query.value(0).toString();
         return query.value(0).toString();
     }
+    return "";
 }
 
 Song DataBase::querySongInfo(QString url)
 {
-    //Song song;
+    Song song("","","","","","","","");
     QSqlDatabase db = QSqlDatabase::database("QSQLITE"); //建立数据库连接
     QSqlQuery query(db);
     query.prepare(QString("select * from songlist where songdir = '%1'").arg(url));
@@ -106,6 +109,7 @@ Song DataBase::querySongInfo(QString url)
                   query.value(7).toString());
         return song;
     }
+    return song;
 }
 
 QString DataBase::queryAlbum(QString name)
@@ -123,6 +127,7 @@ QString DataBase::queryAlbum(QString name)
         //qDebug() << query.value(0).toString();
         return query.value(0).toString();
     }
+    return "";
 }
 
 QString DataBase::queryImage(QString name)
@@ -140,6 +145,7 @@ QString DataBase::queryImage(QString name)
         //qDebug() << query.value(0).toString();
         return query.value(0).toString();
     }
+    return "";
 }
 
 QString DataBase::queryLyr(QString name)
@@ -157,6 +163,7 @@ QString DataBase::queryLyr(QString name)
         //qDebug() << query.value(0).toString();
         return query.value(0).toString();
     }
+    return "";
 }
 
 //根据ID删除记录

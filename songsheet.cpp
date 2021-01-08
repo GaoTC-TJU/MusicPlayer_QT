@@ -13,7 +13,7 @@ SongSheet::SongSheet(QWidget *parent) : QWidget(parent)
     QSSParser qss(file);
     auto str = qss.getStyleSheet();
     search->m_lineSearch->setStyleSheet(str);
-    search->m_lineSearch->setPlaceholderText(QString("搜索音乐,歌手,歌词,用户"));
+    search->m_lineSearch->setPlaceholderText(QString("搜索歌单音乐"));
 
     search->m_lineSearch->setPalette(pal);
     search->m_btnSearch = new QPushButton(search);

@@ -816,7 +816,13 @@ void MainWindow::downloadSelectedSong(const QModelIndex &index) {
             {
                 QString name = songName + "-" + artistName;
                 m_showPlayList->addSong(name);
-                QPushButton *button = new QPushButton("X");
+                QPushButton *button = new QPushButton("");
+                button->setCursor(Qt::PointingHandCursor);
+                button->setToolTip(QString("删除这首歌"));
+
+                button->setStyleSheet("QPushButton{background:rgb(43,43,43);border:0px;}\
+                                               QPushButton{image:url(:/images/images/close_normal.png)}\
+                                               QPushButton:hover{image:url(:/images/images/close_pressed.png);}");
                 int row=m_showPlayList->m_PlayListModel->rowCount() - 1;
                 m_showPlayList->m_PlayList->setIndexWidget(m_showPlayList->m_PlayListModel->index(row, 1), button);
 
@@ -835,7 +841,16 @@ void MainWindow::downloadSelectedSong(const QModelIndex &index) {
                 but->setGeometry(0, 0, 25, 25);
                 int ro=m_LocalMusic->m_SongSheetModel->rowCount() - 1;
                 m_LocalMusic->m_SongSheet->setIndexWidget(m_LocalMusic->m_SongSheetModel->index(ro, 1), but);
-                connect(but, SIGNAL(clicked()), this, SLOT(removeBtnClicked()));
+                connect(but, SIGNAL(clicked()), this, SLOT(likeBtnClicked()));
+                QPushButton *butto = new QPushButton();
+                butto->setCursor(Qt::PointingHandCursor);
+                butto->setToolTip(QString("添加这首歌到歌单"));
+
+                butto->setStyleSheet("QPushButton{background:rgb(43,43,43);border:0px;}\
+                                               QPushButton{image:url(:/images/images/add.png)}\
+                                               QPushButton:hover{image:url(:/images/images/add.png);}");
+                connect(butto, SIGNAL(clicked()), this, SLOT(addToSongSheetClicked()));
+                m_LocalMusic->m_SongSheet->setIndexWidget(m_LocalMusic->m_SongSheetModel->index(ro, 5), butto);
 
             }
 
@@ -961,7 +976,7 @@ void MainWindow::removeBtnClicked()
     }
     else
     {
-        SongSheet* ss;
+        SongSheet* ss = new SongSheet();
         foreach(SongSheet* s, m_SongSheetList)
         {
             if(s->isVisible())
@@ -1057,7 +1072,7 @@ void MainWindow::LeftTableClick()
 
 void MainWindow::LocalListClick()
 {
-    SongSheet* ss;
+    SongSheet* ss = new SongSheet();
     if(m_LocalMusic->isVisible()) ss = m_LocalMusic;
     else foreach(SongSheet* s, m_SongSheetList) if(s->isVisible()) {ss = s; break;}
     int row = ss->m_SongSheet->currentIndex().row();
@@ -1180,7 +1195,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::likeBtnClicked()
 {
-    SongSheet* ss;
+    SongSheet* ss = new SongSheet();
     if(m_LocalMusic->isVisible()) ss = m_LocalMusic;
     else
     {
@@ -1338,7 +1353,7 @@ void MainWindow::backToHome()
     }
     m_showPlayList->hide();
     m_middleWheelPic->hide();
-    m_leftMusicShowWidget->hide();
+    m_leftMusicShowWidget->minimumWidget();
     m_searchResult->hide();
     QPixmap pix;
     pix.load(":/images/TJnight.png");
